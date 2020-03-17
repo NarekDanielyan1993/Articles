@@ -1,0 +1,25 @@
+.input {
+    margin-bottom: 5px;
+    width:  80%;
+    height: 1.5rem;
+    color: black;
+}
+
+.inputElement label {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: black;
+}
+
+.inputElement  {
+    margin-bottom: 5px;
+    outline: none;
+    padding: 5px 6px;
+    box-sizing: border-box;
+}
+
+.inputElement textarea {
+    width: 80%;
+}
+

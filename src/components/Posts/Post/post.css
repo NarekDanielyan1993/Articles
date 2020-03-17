@@ -1,0 +1,34 @@
+.post {
+    width: 25rem;
+    padding: .5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #3b0062;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+}
+  
+.post:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.post__meta {
+    color: #707070;
+    margin: 0;
+}
+
+.post__title {
+    font-size: 1.5rem;
+}
+
+.post__content {
+    margin: 1rem 0;
+    word-break: break-all;
+}
+
+.post__actions {
+    bottom: 0;
+    left: 25%;
+}
+  
+  
