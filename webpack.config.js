@@ -1,46 +1,68 @@
 const path = require("path");
-
+const webpack = require("webpack");
+const TerserPlugin = require('terser-webpack-plugin');
 
 //PLUGINS INCLUDED
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HTMLWebpackPLugin = require("html-webpack-plugin");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === "development";
 
-const fileName = (ext) => isDev ? "[name]."+ext : "[name].[hash]."+ext;
+const fileName = (ext) => isDev ? "[name]." + ext : "[name].[hash]." + ext;
+
+const optimizeFiles = (isDevelopment) => {
+    if(isDevelopment) {
+        return {};
+    }
+    return {
+        minimize: true,
+        removeAvailableModules: true,
+        minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
+    }
+}
 
 module.exports = {
     context: path.resolve(__dirname, "src"),
     entry: {
-        main: ["@babel/polyfill", "./index.js"]
+        main: [
+            "@babel/polyfill",
+            "./index.js"
+        ]
     },
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, "./dist"),
         filename: fileName("js"),
     },
     resolve: {
-        extensions: ['.js', 'jsx', '.json', '.png', '.csv', '.xml', '.css']
+        extensions: [".js", ".jsx", ".json", ".png", ".csv", ".xml", ".css", ".ts"]
     },
     devServer: {
         port: 4100,
-        hot: isDev
+        publicPath: "/",
+        contentBase: path.resolve(__dirname, "./dist"),
+        watchContentBase: true,
+        hot: true,
+        inline: true,
+        historyApiFallback: true,
     },
-    devtool: 'cheap-module-eval-source-map',
+    optimization: optimizeFiles(isDev),
+    devtool: "source-maps",
     module: {  
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(ts|tsx|js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: "babel-loader"
+                    loader: "babel-loader"
                 }
             },
             {
                 test: /\.html$/,
                 use: [
                     {
-                      loader: "html-loader"
+                        loader: "html-loader"
                     }
                 ]
             },
@@ -50,10 +72,10 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                          hmr: !isDev,
+                            hmr: !isDev,
                         },
                     },
-                    'css-loader',
+                    "css-loader"
                 ],
             },
             {
@@ -77,6 +99,7 @@ module.exports = {
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: fileName("css")
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ]
 };

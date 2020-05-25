@@ -6,10 +6,11 @@ const initialState = {
     error: false,
     errorMessage: "",
     singlePost: "",
-    displayedPost: ""
+    displayedPost: "",
+    isModalClosed: true
 }
 
- const reducer = (state = initialState, action) => {
+ export const postReducer = (state = initialState, action) => {
     switch(action.type) {
         case actionTypes.FETCH_POSTS_SUCCESS:
             return {
@@ -26,7 +27,8 @@ const initialState = {
         case actionTypes.GET_POST_SUCCESS:
             return {
                 ...state,
-                singlePost: state.posts.find(p => p.id === action.id)
+                singlePost: state.posts.find(p => p.id === action.id),
+                isModalClosed: false
             }
         case actionTypes.LOADING_DATA:
             return {
@@ -54,13 +56,21 @@ const initialState = {
                 ...state,
                 loading: false
             }
+        case actionTypes.CLOSE_MODAL_SUCCESS:
+            return {
+                ...state,
+                isModalClosed: true
+            }
+        case actionTypes.OPEN_MODAL_SUCCESS:
+            return {
+                ...state,
+                isModalClosed: false,
+                singlePost: null
+            }
         default:
             return state;
     }
 }
-
-export default reducer;
-
 
 
 

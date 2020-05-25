@@ -1,0 +1,3 @@
+export {
+    postReducer
+} from "./postReducer";

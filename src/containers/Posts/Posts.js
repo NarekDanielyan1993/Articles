@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 import EditPost from "../../components/Posts/EditPost/EditPost";
 import Post from "../../components/Posts/Post/Post";
@@ -20,69 +20,59 @@ class Posts extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props.posts);
-        this.props.onFetchPosts()
+        this.props.onFetchPosts();
     }
-
-    componentDidUpdate(prevProps, prevState) {
-        if(this.props.post && this.props.post !== prevProps.post) {
-            this.setState({
-                isEditing: true,
-                editPost: this.props.post
-            })
-        }
-    }
-
+    
     startEditPostHandler = postId => {
-        this.props.onGetSinglePost(postId)
+        this.props.onGetSinglePost(postId);
     }
 
-    deletePostHandler = postId => {
+    deletePostHandler = () => {
         
     }
 
     newPostHandler = () => {
-        this.setState({isEditing: true})
+        this.props.onOpenModal();    
     }
 
     cancelEditHandler = () => {
-        this.setState({ isEditing: false, editPost: null });
+        this.props.onCloseModal();
     }
 
     render() {
         return (
             <Fragment>
                 <section className="edit-control">
-                        <EditPost 
-                            onCancelEdit={this.cancelEditHandler} 
-                            editing={this.state.isEditing} 
-                            selectedPost={this.state.editPost} 
-                            newPost={this.newPostHandler}
-                            addPost={this.props.onCreatePost}
-                        />
+                    <EditPost 
+                        onCancelAddEdit={this.cancelEditHandler} 
+                        isModalClosed={this.props.isModalClosed} 
+                        selectedPost={this.props.selectedPost} 
+                        newPost={this.newPostHandler}
+                        addPost={this.props.onCreatePost}
+                    />
                 </section>
                 <section className="posts-list">
                     {this.props.postsLoading ? 
                         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                          <Loader />
+                            <Loader />
                         </div>
-                    : null}
-                    {this.props.posts.length <= 0 && !this.props.postsLoading ? (
-                      <p style={{ textAlign: 'center' }}>No posts found.</p>
-                    ) : null}
-                    {this.props.posts.length > 0 ? this.props.posts.map(post => {
-                        return ( <Post
+                        : null}
+                    {this.props.posts.length <= 0 && !this.props.postsLoading ? 
+                        <p style={{ textAlign: 'center' }}>No posts found.</p>
+                        : null}
+                    {this.props.posts.length > 0 && !this.props.postsLoading ? this.props.posts.map(post => {
+                        return <Post
                             key={post.id}
                             id={String(post.id)}
                             title={post.title ? post.title : ""}
                             content={post.body ? post.body : ""}
                             onStartEdit={() => this.startEditPostHandler(post.id)}
                             onDelete={() => this.deletePostHandler(post.id)}
-                        />
-                    )}) : null}
+                        />;
+                    }) : null}
                 </section>
             </Fragment>
-        )
+        );
     }
 }
 
@@ -90,16 +80,19 @@ const mapStateToProps = (state) => {
     return {
         postsLoading: state.post.loading,
         posts: state.post.posts,
-        post: state.post.singlePost
-    }
-} 
+        selectedPost: state.post.singlePost,
+        isModalClosed: state.post.isModalClosed
+    };
+}; 
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onFetchPosts: () => dispatch(actions.getPosts()),
         onCreatePost: () => dispatch(actions.createPost()),
-        onGetSinglePost: (postId) => dispatch(actions.getSinglePost(postId))
-    }
-} 
+        onGetSinglePost: (postId) => dispatch(actions.getSinglePost(postId)),
+        onCloseModal: () => dispatch(actions.closeModal()),
+        onOpenModal: () => dispatch(actions.openModal())
+    };
+}; 
 
- export default connect(mapStateToProps, mapDispatchToProps)(Posts);
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);

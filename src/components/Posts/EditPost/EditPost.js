@@ -7,7 +7,6 @@ import Input from "../../Form/Input";
 
 import "./editPost.css";
 
-
 const POST_FORM = {
     title: {
       value: '',
@@ -29,11 +28,10 @@ export default class EditPost extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-       
+        console.log(this.props.selectedPost)
         if (
-          this.props.editing &&
-          prevProps.editing !== this.props.editing &&
-          prevProps.selectedPost !== this.props.selectedPost
+            !this.props.isModalClosed &&
+            prevProps.isModalClosed !== this.props.isModalClosed && this.props.selectedPost
         ) {
             const postForm = {
               title: {
@@ -47,7 +45,7 @@ export default class EditPost extends Component {
                 valid: true
               }
             };
-          this.setState({ postForm: postForm, formIsValid: true });
+            this.setState({ postForm: postForm, formIsValid: true });
         }
     }
 
@@ -56,7 +54,7 @@ export default class EditPost extends Component {
             postForm: POST_FORM,
             formIsValid: false
         })
-        this.props.onCancelEdit();
+        this.props.onCancelAddEdit();
     };
     
     acceptPostChangeHandler = () => {
@@ -66,10 +64,10 @@ export default class EditPost extends Component {
         };
         this.props.addPost(post);
         this.setState({
-          postForm: POST_FORM,
-          formIsValid: false,
+            postForm: POST_FORM,
+            formIsValid: false,
         });
-        this.props.onCancelEdit();
+        this.props.onCancelAddEdit();
     };
 
     checkValidity = (field, value) => {
@@ -109,7 +107,7 @@ export default class EditPost extends Component {
                             NEW POST
                         </Button>
                     </div>
-                    {this.props.editing ? 
+                    {!this.props.isModalClosed ? 
                     <div>
                         <Backdrop onClick={this.cancelPostChangeHandler} />
                         <Modal
@@ -131,7 +129,7 @@ export default class EditPost extends Component {
                                 />
                                 <span className="errorMessage">{this.state.postForm['title'].touched
                                                                 && !this.state.postForm['title'].valid ?
-                                    "Entered name length should be greater than 2 characters" 
+                                    "Entered name length should be greater than 4 characters" 
                                     : null}
                                 </span>
                                 <Input
@@ -144,8 +142,8 @@ export default class EditPost extends Component {
                                     touched={this.state.postForm['content'].touched}
                                     value={this.state.postForm['content'].value}
                                 />
-                                 <span className="errorMessage">{this.state.postForm['content'].touched 
-                                                                 && !this.state.postForm['content'].valid  ?
+                                <span className="errorMessage">{this.state.postForm['content'].touched 
+                                                                && !this.state.postForm['content'].valid ?
                                     "Content should be at least 3 characters long" 
                                     : null}
                                 </span>

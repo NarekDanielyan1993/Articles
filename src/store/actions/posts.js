@@ -61,10 +61,7 @@ export const getPosts = () => {
 export const createPost = (postData) => {
     return dispatch => {
         dispatch(loadData())
-        axios({method: "post", url: "posts", data: postData, headers: {
-            "Content-Type": "application/json"
-            }
-        })
+        axios({method: "post", url: "posts", data: postData})
         .then((response) => {
             console.log(response)
             dispatch(create_post_success(response.data))
@@ -79,5 +76,29 @@ export const getSinglePost = (postId) => {
     return dispatch => {
         console.log(postId)
         dispatch(get_post_success(postId))
+    }
+}
+
+const close_modal_success = () => {
+    return {
+        type: actionTypes.CLOSE_MODAL_SUCCESS
+    }
+}
+
+export const closeModal = () => {
+    return dispatch => {
+        dispatch(close_modal_success())
+    }
+}
+
+const open_modal_success = () => {
+    return {
+        type: actionTypes.OPEN_MODAL_SUCCESS
+    }
+}
+
+export const openModal = () => {
+    return dispatch => {
+        dispatch(open_modal_success())
     }
 }

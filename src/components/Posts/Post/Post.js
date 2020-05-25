@@ -6,7 +6,7 @@ import "./post.css";
 const post = props => (
     <article className="post">
         <header className="post__header">
-            <h1 className="post__title">{props.title}</h1>
+            <h3 className="post__title">{props.title}</h3>
         </header>
         <div className="post__content">
         <p>{props.content}</p></div>

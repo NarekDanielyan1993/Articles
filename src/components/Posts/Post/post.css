@@ -1,15 +1,19 @@
 .post {
     width: 25rem;
-    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem;
     margin-bottom: 1rem;
+    margin-right: 1rem;
     border: 1px solid #3b0062;
     border-radius: 5px;
     font-size: 1rem;
     text-align: center;
+    box-sizing: border-box;
 }
   
 .post:not(:last-child) {
-    margin-right: 1rem;
+    
 }
 
 .post__meta {
@@ -22,13 +26,19 @@
 }
 
 .post__content {
-    margin: 1rem 0;
+    margin: 2rem 0;
     word-break: break-all;
 }
 
 .post__actions {
-    bottom: 0;
-    left: 25%;
+    margin-top: auto;
 }
+
+@media all and (max-width: 680px) {
+    .post {
+        margin: 0 0 1rem 0;
+        width: 100%;
+    }
+  }
   
   

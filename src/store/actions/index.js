@@ -1,7 +1,9 @@
 export {
     getPosts,
     createPost,
-    getSinglePost
+    getSinglePost,
+    closeModal,
+    openModal
 } from "./posts";
 
 export {
